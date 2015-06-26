@@ -26,7 +26,7 @@ main(void)
     ws_init();
     for(i = 0; i < 20; i++)
     {
-    	ws_set_pixel(i, 255, 0, 0);
+    	ws_set_pixel(i, 255 - i * 10, i * 10, 0);
     }
 
 
@@ -34,6 +34,5 @@ main(void)
     {
     	ws_update();
     	while( ws_busy() );
-    	SysCtlDelay(1000000);
     }
 }

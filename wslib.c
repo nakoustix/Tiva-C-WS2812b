@@ -23,6 +23,7 @@ static uint32_t draw_count;
 static uint8_t draw_mask;
 static bool last_pixel = false;
 static bool busy = false;
+static uint8_t reset_count = 0;
 
 void pwm_int()
 {
@@ -36,8 +37,14 @@ void pwm_int()
 
 	if( last_pixel )
 	{
-		PWMGenDisable(PWM1_BASE, PWM_GEN_3);
-		busy = false;
+		// Do 42 periods with duty = 0 to hold the line low for
+		// 52.5 us (minimum reset time is 50 us; 1s / 800kHz * 42 cycles = 52.5 us)
+		// Maybe it works with only 41..?
+		if( ++reset_count >= 42 )
+		{
+			PWMGenDisable(PWM1_BASE, PWM_GEN_3);
+			busy = false;
+		}
 	}
 	else
 	{
@@ -49,6 +56,8 @@ void pwm_int()
 			if(++draw_count >= buf_size)
 			{
 				last_pixel = true;
+				reset_count = 0;
+				PWMPulseWidthSet( PWM1_BASE, PWM_OUT_7, 0 );
 			}
 		}
 	}
