@@ -15,7 +15,6 @@
 #define PW_HIGH	72
 #define PW_LOW	28
 
-//static uint8_t frame_buffer[STRIP_LEN * 3];
 static uint8_t *frame_buffer;
 
 static uint32_t buf_size;
@@ -136,4 +135,12 @@ void ws_set_pixel(uint32_t pixel, uint8_t r, uint8_t g, uint8_t b)
 	frame_buffer[offset] = r;
 	frame_buffer[offset+1] = g;
 	frame_buffer[offset+2] = b;
+}
+
+void ws_set_pixel(uint32_t pixel, rgb_t col)
+{
+	uint32_t offset = pixel * 3;
+	frame_buffer[offset] = col.r;
+	frame_buffer[offset+1] = col.g;
+	frame_buffer[offset+2] = col.b;
 }

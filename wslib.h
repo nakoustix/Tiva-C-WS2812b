@@ -6,8 +6,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define STRIP_LEN	20
-
 typedef struct
 {
 	uint8_t r;
@@ -18,6 +16,7 @@ typedef struct
 void ws_init(uint16_t num_leds);
 void ws_update();
 void ws_set_pixel(uint32_t pixel, uint8_t r, uint8_t g, uint8_t b);
+void ws_set_pixel(uint32_t pixel, rgb_t col);
 bool ws_busy();
 
 
