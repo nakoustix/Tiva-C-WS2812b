@@ -12,6 +12,7 @@
 #include "driverlib/pin_map.h"
 #include "wslib.h"
 
+#define STRIP_LEN	20
 
 int
 main(void)
@@ -23,8 +24,8 @@ main(void)
     SysCtlDelay(10000);
 
 
-    ws_init();
-    for(i = 0; i < 20; i++)
+    ws_init( STRIP_LEN );
+    for(i = 0; i < STRIP_LEN; i++)
     {
     	ws_set_pixel(i, 255 - i * 10, i * 10, 0);
     }

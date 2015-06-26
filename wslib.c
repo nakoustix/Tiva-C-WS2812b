@@ -15,7 +15,8 @@
 #define PW_HIGH	72
 #define PW_LOW	28
 
-static uint8_t frame_buffer[STRIP_LEN * 3];
+//static uint8_t frame_buffer[STRIP_LEN * 3];
+static uint8_t *frame_buffer;
 
 static uint32_t buf_size;
 
@@ -24,6 +25,7 @@ static uint8_t draw_mask;
 static bool last_pixel = false;
 static bool busy = false;
 static uint8_t reset_count = 0;
+static uint16_t strip_len;
 
 void pwm_int()
 {
@@ -64,9 +66,12 @@ void pwm_int()
 
 }
 
-void ws_init()
+void ws_init(uint16_t num_leds)
 {
-	buf_size = STRIP_LEN * 3;
+	strip_len = num_leds;
+	buf_size = strip_len * 3;
+
+	frame_buffer = (uint8_t *) malloc( buf_size );
 
 	memset(frame_buffer, 0, buf_size);
 

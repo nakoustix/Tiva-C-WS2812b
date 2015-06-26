@@ -15,7 +15,7 @@ typedef struct
 	uint8_t b;
 } rgb_t;
 
-void ws_init();
+void ws_init(uint16_t num_leds);
 void ws_update();
 void ws_set_pixel(uint32_t pixel, uint8_t r, uint8_t g, uint8_t b);
 bool ws_busy();
