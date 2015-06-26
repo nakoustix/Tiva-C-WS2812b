@@ -11,6 +11,7 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/pin_map.h"
 #include <string.h>
+#include <stdlib.h>
 
 #define PW_HIGH	72
 #define PW_LOW	28
@@ -25,6 +26,9 @@ static bool last_pixel = false;
 static bool busy = false;
 static uint8_t reset_count = 0;
 static uint16_t strip_len;
+static uint8_t r_offset = 0;
+static uint8_t g_offset = 1;
+static uint8_t b_offset = 2;
 
 void pwm_int()
 {
@@ -137,10 +141,45 @@ void ws_set_pixel(uint32_t pixel, uint8_t r, uint8_t g, uint8_t b)
 	frame_buffer[offset+2] = b;
 }
 
-void ws_set_pixel(uint32_t pixel, rgb_t col)
+void ws_set_pixel_rgb(uint32_t pixel, rgb_t col)
 {
 	uint32_t offset = pixel * 3;
-	frame_buffer[offset] = col.r;
-	frame_buffer[offset+1] = col.g;
-	frame_buffer[offset+2] = col.b;
+	frame_buffer[offset + r_offset] = col.r;
+	frame_buffer[offset + g_offset] = col.g;
+	frame_buffer[offset + b_offset] = col.b;
+}
+
+void ws_set_color_order( color_order_e order )
+{
+	switch( order )
+	{
+	case CR_RGB:
+	{
+		r_offset = 0;
+		g_offset = 1;
+		b_offset = 2;
+		break;
+	}
+	case CR_RBG:
+	{
+		r_offset = 0;
+		g_offset = 2;
+		b_offset = 1;
+		break;
+	}
+	case CR_GRB:
+	{
+		r_offset = 1;
+		g_offset = 0;
+		b_offset = 2;
+		break;
+	}
+	case CR_GBR:
+	{
+		r_offset = 2;
+		g_offset = 0;
+		b_offset = 1;
+		break;
+	}
+	}
 }
